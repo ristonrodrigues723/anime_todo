@@ -1,0 +1,152 @@
+body{
+    font-family:'poppins',sans-serif;
+    margin:0;
+    background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
+    color:#333;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+
+}
+.avatar{
+    width:100px;
+    height:100px;
+    margin: 10px auto;
+    border-radius:50%;
+    display:block;
+
+}
+
+.task {
+    background:#fff0f5;
+    padding:10px;
+    border-radius:8px;
+    transition:transform 0.3s;
+}
+
+.task:hover{
+    transform:scale(1.05);
+}
+
+.sticker:hover{
+    transform:scale(1.3);
+    box-shadow:0 0 10px rgba(255,182,193,0.4)
+    ;
+    box-shadow:0 0 10px rgba(255,182,193,0.7);
+    border-radius:70%;
+
+}
+.sticker.active{
+    background-color:rgba(255,105,180,0.6);
+    box-shadow:0 0 15px rgba(255,105 180,0.9);
+    border-radius:50%;
+}
+.app{
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    padding:20px;
+    
+    text-align:center;
+    width:300px;
+}
+
+h1 {
+    margin-bottom:15px;
+    font-size:24px;
+    color:#444;
+    padding:2px;
+
+
+}
+.input-container{
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+input[type="text"]{
+    flex:1;
+    padding:10px;
+    border: 2px solid #ddd;
+    border-radius:5px;
+}
+
+button {
+    background:#ff6f61;
+    border:none;
+    color:white ;
+    padding:10px 15px;
+    font-size:18px;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.3s ease;
+
+}
+button:hover{
+     background:#e95b50;
+}
+
+.stickers{
+
+    bottom:10px;
+    right:10px;
+    background:white;
+    padding:10px;
+    border-radius:10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+
+}
+
+.sticker {
+    font-size: 24px;
+    margin:5px;
+    cursor:pointer;
+    transition:transform 0.2s,background-color 0.2s,box-shadow 0.2s;
+}
+
+.sticker:hover{
+    transform:scale(1.2);
+}
+
+#mascotContainer{
+    /* position:fixed; */
+    bottom:20px;
+    right:20px;
+    width:200px;
+    height:200px;
+    margin:20px auto;
+
+
+
+}
+#mascot{
+    width:100%;
+    height:auto;
+    transition:opacity 0.3s ease;
+    object-fit: contain;
+}
+
+.aminapp{
+    background:#fff;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    padding:20px;
+    width:90%;
+    max-width:500px;
+    text-align:center;
+}
+
+@keyframes sparkle { 
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+}
