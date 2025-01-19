@@ -8,8 +8,9 @@ const themes = {
         stickers:["🌸", "🎀", "⭐", "🌟","🦄", "🌈", "🪄", "💖"],
         backgroundMusic:"./audio/kawaii-bgm.mp3",
         // mascotVoices:{
-        //     greeting:""
-        // }
+        //     greeting:"" wanted to add the anime voices but the bg music took too long theres a problem-
+        // }    somehow autplay in music gets blocked wanted it to play after first user interaction but it stops
+        //     doesnt start unless it starts
 
     },
     cyberpunk: {
@@ -63,7 +64,7 @@ class backgroundMusicController{
         `;
         document.querySelector('.mainapp').appendChild(musicControls);
 
-        // Toggle button event listener
+        // Toggle buttondoesnt seem to work as i ntended it should stop i mean silence the music as needd
         document.getElementById('toggleMusic').onclick = () => this.toggleMute();
     }
 
@@ -78,6 +79,7 @@ class backgroundMusicController{
         }
 
     }
+    // some erros in wirking will handel in next update muting not working
     toggleMute(){
         this.isMuted =!this.isMuted;
         localStorage.setItem('isMuted',this.isMuted);
@@ -101,7 +103,7 @@ class backgroundMusicController{
 
         }
     }
-
+//doesnt seem to work as intended man spent a lot of time here debuging
     updateMusicButton(){
         const toggleBtn=document.getElementById('toggleMusic');
         if (toggleBtn) {
@@ -142,7 +144,7 @@ function loadTasksFromLocalStorage() {
 
 
     }else {
-        console.log('No saved tasks found'); // Debug line
+        console.log('No saved tasks found'); // saving works goo d local memeory 
     }
 }
 
