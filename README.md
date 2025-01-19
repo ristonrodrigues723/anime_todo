@@ -1,4 +1,16 @@
 # 🌸 MoMoChan's Super Kawaii To-Do List! 🌸
+updates--- added 3 more varients of the main mascots with each 3 varients , 
+added 3 other Themes the themes are based on the mascots color pallate(as suggested by feedback someone suggested i use my own color)
+the 3 themes are cyberpunk,dark and nature , added 3 sticker groups 4 if we include original kawii palatte, 
+added locl storage for both tasks and theme, 
+added background music 
+
+
+current errors-some errors n handling bg music , made it so the music started after user interaction , bjt now it gets autoblocked after theme change 
+also some error like a band appears when thre site is opened on a mbile im sure i fixed that maybe when i had to backtrack it got messed up
+
+future plans- voice effects for each varient and version of mascot, 
+fixing the problems with the background music and autoblocking
 
 Heyyyyy! \(^ω^)/ I made this super cute to-do list with my favorite mascot **MoMoChan**! She helps you stay organized in the most adorable way possible! ✨
 
