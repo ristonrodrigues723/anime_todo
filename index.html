@@ -13,11 +13,21 @@
 </head>
 <body>
     <div id="mascotContainer">
-        <img id="mascot" src="normal.png" alt="MoMoChan">
+        <img id="mascot" src="images/kawaii-normal.png" alt="MoMoChan">
     </div>
     <div class="mainapp">
-        <h1> <h1>🌸 MoMoChan's Kawaii To-Do List 🌸</h1>
-       
+         <h1>🌸 MoMoChan's Kawaii To-Do List 🌸</h1>
+         <div class="music-controls">
+            <button id ="toggleMusic" class="music-btn">🎵</button>
+         </div>
+       <div class="theme-selector">
+      
+        <h3>Choose Theme</h3>
+        <button class="theme-btn" data-theme="Kawaii">🌸</button>
+        <button class="theme-btn" data-theme="cyberpunk">🤖</button>
+        <button class="theme-btn" data-theme="dark" title="Dark Theme">🌙</button>
+        <button class="theme-btn" data-theme="forest" title="Forest Theme">🌿</button>
+       </div>
         <div class="input-container">
             <input type="text" id="taskInput" placeholder="Momochan waiting new task..">
             <button id ="addTask">
@@ -25,20 +35,10 @@
 
             </button>
         </div>
-        <ul id="taskList"></ul>
+        <ul id="taskList" class="task-list"></ul>
 
-        <div class="stickers">
+        <div class="sticker-container">
             <h3>Momochans sticers:</h3>
-            <div id="stickerContainer">
-                <span class="sticker">🌟</span>
-                <span class="sticker">🎉</span>
-                <span class="sticker">✅</span>
-                <span class="sticker">❤️</span>
-                <span class="sticker">🔥</span>
-             
-            </div>
-    
-    
         </div>
 
 

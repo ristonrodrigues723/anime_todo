@@ -1,14 +1,30 @@
 body{
     font-family:'poppins',sans-serif;
     margin:0;
-    background:linear-gradient(135deg,#ffb6c1,#ffe4e1);
-    color:#333;
+    background:var(--primary-bg);
+    color:var(--text-color);
     display:flex;
     flex-direction: column;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    overflow:hidden;
+    min-height:100vh;
+
+    overflow-x:hidden;
+
+}
+* {
+    box-sizing: border-box;
+}
+:root{
+    --primary-bg:linear-gradient(135deg,#ffb6c1,#ffe4e1);
+    --card-bg:#fff;
+    --text-color:#333;
+    --button-hover:#e95b50;
+    --button-bg:#ff6f61;
+    --task-bg:#fff0f5;
+    --sticker-shadow:rgba(255,182,193,0.7);
+    --sticker-active:rgba(255,105,180,0.6);
+    --sticker-active-shadow:rgba(255,105,180,0.9);
 
 }
 .avatar{
@@ -20,11 +36,22 @@ body{
 
 }
 
+.mainapp{
+  
+    max-width:800px;
+    margin:20px auto;
+    padding:20px;
+    border-radius:15px;
+    box-shadow :0 4px 15px rgba(0,0,0,0.2);
+
+    /* background:var(--card-bg); */
+}
 .task {
-    background:#fff0f5;
+    background:var(--task-bg);
     padding:10px;
     border-radius:8px;
     transition:transform 0.3s;
+    color:var(--text-color);
 }
 
 .task:hover{
@@ -33,19 +60,17 @@ body{
 
 .sticker:hover{
     transform:scale(1.3);
-    box-shadow:0 0 10px rgba(255,182,193,0.4)
-    ;
-    box-shadow:0 0 10px rgba(255,182,193,0.7);
+    box-shadow: 0 0 10px var(--sticker-shadow);
     border-radius:70%;
 
 }
 .sticker.active{
-    background-color:rgba(255,105,180,0.6);
-    box-shadow:0 0 15px rgba(255,105 180,0.9);
+    background-color:var(--sticker-active);
+    box-shadow:var(--sticker-active-shadow);
     border-radius:50%;
 }
 .app{
-    background:#fff;
+    background:var(--card-bg);
     border-radius:10px;
     box-shadow:0 4px 15px rgba(0,0,0,0.2);
     padding:20px;
@@ -57,7 +82,7 @@ body{
 h1 {
     margin-bottom:15px;
     font-size:24px;
-    color:#444;
+    color:var(--text-color);
     padding:2px;
 
 
@@ -73,10 +98,13 @@ input[type="text"]{
     padding:10px;
     border: 2px solid #ddd;
     border-radius:5px;
+    background:var(--card-bg);
+    color:var(--text-color);
 }
 
 button {
-    background:#ff6f61;
+    /* background:#ff6f61; */
+    background:var(--button-bg);
     border:none;
     color:white ;
     padding:10px 15px;
@@ -87,15 +115,21 @@ button {
 
 }
 button:hover{
-     background:#e95b50;
+     /* background:#e95b50; */
+     background:var(--button-hover);
 }
 
 .stickers{
 
-    bottom:10px;
-    right:10px;
-    background:white;
+    bottom:20px;
+    right:20px;
+    display:flex;
+    flex-direction: wrap;
+    background:var(--card-bg);
     padding:10px;
+    gap:10px;
+    z-index: 100;
+
     border-radius:10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 
@@ -113,7 +147,7 @@ button:hover{
 }
 
 #mascotContainer{
-    /* position:fixed; */
+    position:relative;
     bottom:20px;
     right:20px;
     width:200px;
@@ -125,19 +159,110 @@ button:hover{
 }
 #mascot{
     width:100%;
-    height:auto;
+    height:100%;
     transition:opacity 0.3s ease;
     object-fit: contain;
+    margin-top: 25px;
 }
 
 .aminapp{
-    background:#fff;
+    background:var(--card-bg);
     border-radius:15px;
     box-shadow:0 4px 15px rgba(0,0,0,0.2);
     padding:20px;
     width:90%;
     max-width:500px;
     text-align:center;
+}
+
+
+.theme-selector{
+    margin:10px 0;
+    padding:10px;
+    background:rgba(255,255,255,0.3);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: center;
+    gap:10px;
+}
+
+
+.theme-btn{
+    margin:0 5px;
+    font-size:20px;
+    padding:8px 12px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    transition:0.3s;
+    background:white;
+}
+
+.theme-btn:active{
+    transform:scale(1.2);
+}
+
+.theme-btn.active{
+    box-shadow:0 0 10px rgba(255,105,180,0.9);
+}
+
+
+
+.theme-dark{
+    --primary-bg:linear-gradient(135deg,#2c3e50,#3498db);
+    --card-bg:#1a1a1a;
+    --text-color:#423939;
+    --button-bg:#3498db;
+    --button-hover:#2980b9;
+    --task_bg:#1a1a1a;
+}
+
+.theme-forest{
+    --primary-bg:linear-gradient(135deg,#2c3e50,#27ae60);
+    --card-bg:#fff;
+    --text-color:#2c3e50;
+    --button-bg:#27ae60;
+    --button-hover:#219a52;
+    --task-bg:#eafaf1;
+
+}
+.theme-cyberpunk{
+    --primary-bg:linear-gradient(135deg,#ff00ff,#00ffff);
+    --card-bg:#0a0a0a;
+    --text-color:#00ffff;
+    --button-bg:#ff00ff;
+    --button-hover:#b700b7;
+    --task-bg:#1a1a1a;
+    border:2px solid #00ffff;
+    box-shadow: 0 0 20px rgba(0,255,255,0.5);
+}
+
+/* Music Controls - add this to your styles.css */
+.music-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.music-btn {
+    font-size: 24px;
+    padding: 10px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.music-btn:hover {
+    transform: scale(1.1);
+    background: var(--button-hover);
 }
 
 @keyframes sparkle { 
