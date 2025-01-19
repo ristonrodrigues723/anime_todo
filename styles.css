@@ -12,6 +12,7 @@ body{
     overflow-x:hidden;
 
 }
+/* there is a major error here i remember i fixed it but no idea maybe i retracked some version */
 * {
     box-sizing: border-box;
 }
@@ -35,9 +36,9 @@ body{
     display:block;
 
 }
-
+/* affects the images the main mascot */
 .mainapp{
-  
+/*   main container */
     max-width:800px;
     margin:20px auto;
     padding:20px;
@@ -47,6 +48,7 @@ body{
     /* background:var(--card-bg); */
 }
 .task {
+/*     affects the tasks we add diff for diff themes */
     background:var(--task-bg);
     padding:10px;
     border-radius:8px;
@@ -57,10 +59,10 @@ body{
 .task:hover{
     transform:scale(1.05);
 }
-
+/*  the sticker styles for kawai theme will change --sticker-shadow used to intakre diff values form diff themes as per selection*/
 .sticker:hover{
     transform:scale(1.3);
-    box-shadow: 0 0 10px var(--sticker-shadow);
+    box-shadow: 0 0 10px var(--sticker-shadow); 
     border-radius:70%;
 
 }
@@ -164,7 +166,7 @@ button:hover{
     object-fit: contain;
     margin-top: 25px;
 }
-
+/*dont know why added this but wont touch  */
 .aminapp{
     background:var(--card-bg);
     border-radius:15px;
@@ -208,7 +210,7 @@ button:hover{
 }
 
 
-
+/*diff themes and things affecting them  */
 .theme-dark{
     --primary-bg:linear-gradient(135deg,#2c3e50,#3498db);
     --card-bg:#1a1a1a;
@@ -264,7 +266,7 @@ button:hover{
     transform: scale(1.1);
     background: var(--button-hover);
 }
-
+/*i added media frames wih grid but things got messed up or i backtrakrked and lost them  */
 @keyframes sparkle { 
     0% {
         transform: scale(1);
