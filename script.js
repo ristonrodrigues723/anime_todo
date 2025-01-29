@@ -7,10 +7,14 @@ const themes = {
         headerText:"🌸 Momochan's kawaii To-Do List 🌸",
         stickers:["🌸", "🎀", "⭐", "🌟","🦄", "🌈", "🪄", "💖"],
         backgroundMusic:"./audio/kawaii-bgm.mp3",
-        // mascotVoices:{
-        //     greeting:"" wanted to add the anime voices but the bg music took too long theres a problem-
-        // }    somehow autplay in music gets blocked wanted it to play after first user interaction but it stops
-        //     doesnt start unless it starts
+        isPlaying :false,
+        voiceClips:{
+            greeting: "./audio/voiceclips/konnichiwa.mp3",
+            taskAdded: "./audio/voiceclips/tuturu_1.mp3",
+            taskCompleted: "./audio/voiceclips/congrats.mp3",
+            click: "./audio/voiceclips/Voicy_SUGO-I.mp3",
+        }
+        // isPlaying :false
 
     },
     cyberpunk: {
@@ -21,6 +25,14 @@ const themes = {
         headerText:"⚡Momochan's CyberTask Command Center ⚡",
         stickers:["⚡", "🤖", "💻", "🎮", "🔧", "💾", "📡", "🕹️"],
         backgroundMusic:"./audio/cyber-bgm.mp3",
+        isPlaying :false,
+        voiceClips:{
+            greeting: "./audio/voiceclips/konnichiwa.mp3",
+            taskAdded: "./audio/voiceclips/Voicy_SUGO-I.mp3",
+            taskCompleted: "./audio/voiceclips/Voicy_Gudjob.mp3",
+            click: "./audio/voiceclips/Woah.mp3",
+        }
+        // isPlaying :false
     },
     forest: {
         mascotPrefix: "forest",
@@ -30,6 +42,13 @@ const themes = {
         headerText:"🌿 Momochan's Enchanted Forest To-Do 🍃",
         stickers:["🌿", "🍃", "🌳", "🍄","🦊", "🦉", "🌺", "🪴"],
         backgroundMusic:"./audio/forest-bgm.mp3",
+        isPlaying :false,
+        voiceClips:{
+            greeting: "./audio/voiceclips/konnichiwa.mp3",
+            taskAdded: "./audio/voiceclips/Woah.mp3",
+            taskCompleted: "./audio/voiceclips/Voicy_Nyanpasu.mp3",
+            click: "./audio/voiceclips/tuturu_1.mp3",
+        }
     },  
     dark: {
         mascotPrefix: "dark",
@@ -38,20 +57,100 @@ const themes = {
         doing: "doing.png",
         headerText:"🌙 Momochan's ✨ Shadow Realm Tasks",
         stickers:["🌙", "⭐", "🔮", "✨","🦇",  "🕯️", "🪄", "🌌"],
-        backgroundMusic:"./audio/dark-bgm.mp3"
+        backgroundMusic:"./audio/dark-bgm.mp3",
+        isPlaying :false ,//state for bg music,
+        voiceClips:{
+            greeting: "./audio/voiceclips/konnichiwa.mp3",
+            taskAdded: "./audio/voiceclips/tuturu_1.mp3",
+            taskCompleted: "./audio/voiceclips/congrats.mp3",
+            click: "./audio/voiceclips/click.mp3",
+        }
     }  
 };
-class backgroundMusicController{
+
+class VoiceController {
+    constructor() {
+        this.currentVoice = new Audio();
+        this.currentVoice.volume = 0.5;
+        this.isMuted = localStorage.getItem('voiceMuted') === 'true';
+        this.updateVoiceButton();
+    }
+
+    playVoiceClip(clipType, theme) {
+        if (this.isMuted) return;
+        
+        const themeConfig = themes[theme.toLowerCase()];
+        if (!themeConfig || !themeConfig.voiceClips || !themeConfig.voiceClips[clipType]) {
+            console.error(`Voice clip not found for ${theme} - ${clipType}`);
+            return;
+        }
+        this.currentVoice.pause();
+        this.currentVoice.currentTime = 0;
+
+        this.currentVoice.src = themeConfig.voiceClips[clipType];
+
+
+
+        this.currentVoice.play().catch(error => {
+            console.error('playback was blocked this is an error:', error);
+            if (error.name === 'NotFoundError') {
+                console.error('Audio file not found: ${themeConfig.voiceClips[clipType]}');
+
+
+            }
+        });
+    }
+
+
+    // toggleMute() {
+    //     this.isMuted = !this.isMuted;
+    //     localStorage.setItem('voiceMuted', this.isMuted);
+        
+    //     if (this.isMuted) {
+    //         this.currentVoice.pause();
+    //     }
+    //     this.updateVoiceButton();
+    // }
+
+    updateVoiceButton() {
+        const voiceBtn = document.getElementById('toggleVoice');
+        if (voiceBtn) {
+            voiceBtn.textContent = this.isMuted ? '🔈' : '🔊';
+        }
+    }
+
+}
+class BackgroundMusicController{
     constructor(){
         this.bgMusic= new Audio();
         this.bgMusic.loop =  true;
         this.bgMusic.volume= 0.3;
 
+        const savedMuteState = localStorage.getItem('isMuted')
+        this.isMuted = savedMuteState === 'true';
+        this.updateMusicButton();
+
         this.isMuted = localStorage.getItem('isMuted')==='true';
         this.setupMusicControls();
-        this.updateMusicButton();
+       
+
+        // this.initializeAudio();
+        if (!this.isMuted) {
+            this.initializeAudio();
+        }
     }
 
+    initializeAudio(){
+        const currentTheme =localStorage.getItem('preferred-theme') || 'kawaii';
+
+
+        
+        if (!this.isMuted) {
+            this.playThemeMusic(currentTheme);
+        } 
+        // removed delayso it dest woait 3 s ecverythime
+       
+    }
 
    
     setupMusicControls() {
@@ -61,28 +160,48 @@ class backgroundMusicController{
             <button id="toggleMusic" class="music-btn">
                 ${this.isMuted ? '🔇' : '🎵'}
             </button>
+            <button id="toggleVoice" class="voice-btn">
+                ${voiceController.isMuted ? '🔈' : '🔊' }
+            </button>
         `;
         document.querySelector('.mainapp').appendChild(musicControls);
 
-        // Toggle buttondoesnt seem to work as i ntended it should stop i mean silence the music as needd
+        // Toggle button event listener
         document.getElementById('toggleMusic').onclick = () => this.toggleMute();
+        document.getElementById('toggleVoice').onclick = () => voiceController.toggleMute();
     }
 
     playThemeMusic(theme){
+
+        this.bgMusic.pause();
+
         const musicPath = themes[theme].backgroundMusic;
+
+        if (this.isMuted) {
+            return
+        }
+
         if (this.bgMusic.src !== musicPath) {
             this.bgMusic.src = musicPath;
+            this.bgMusic.load();
         }
         if (!this.isMuted) {
-            this.bgMusic.play().catch(e => console.log('music autoplay blocked'));
+            // this.bgMusic.load();
+            this.bgMusic.play()
+                .catch(error => {
+                    console.log('music autoplay blocked', error);
+        });
 
         }
 
     }
-    // some erros in wirking will handel in next update muting not working
+
     toggleMute(){
         this.isMuted =!this.isMuted;
-        localStorage.setItem('isMuted',this.isMuted);
+        localStorage.setItem('isMuted', this.isMuted);
+
+
+        this.updateMusicButton();
 
         const toggleBtn = document.getElementById('toggleMusic');
         toggleBtn.textContent = this.isMuted ? '🔇' : '🎵';
@@ -90,20 +209,25 @@ class backgroundMusicController{
         if (this.isMuted){
             this.bgMusic.pause();
         } else{
+            const currentTheme = localStorage.getItem('preferred-theme') || 'kawaii';
+            this.playThemeMusic(currentTheme);
 
-            if (this.bgMusic.readyState>= 2) {
-                this.bgMusic.play().catch(e => console.log('music playback bloaked', e));
+            // if (this.bgMusic.readyState >= 2) { still not working 
+            //     this.bgMusic.play()
+            //         .catch(error => console.log('music playback bloaked:', error));
 
-            } else {
-                this.bgMusic.addEventListener('canplaythrough', () => {
-                    this.bgMusic.play().catch(e =>console.log('Music playback blocked'));
-                }, { once : true});
-            }
+            // } else {
+            //     this.bgMusic.addEventListener('canplaythrough', () => {
+            //         this.bgMusic.play()
+            //         .catch(error =>console.log('Music playback blocked:', error));
+            //     }, { once : true});
+            // }
        
 
         }
     }
-//doesnt seem to work as intended man spent a lot of time here debuging
+// was supposed to start mute but still problems the button doesnt work as needed tried debugging stoll no avail
+
     updateMusicButton(){
         const toggleBtn=document.getElementById('toggleMusic');
         if (toggleBtn) {
@@ -112,11 +236,20 @@ class backgroundMusicController{
         }
     }
 
+    // setTimeout(() =>{
+    //     if (!this.isMuted) {
+    //         const currentTheme = localStorage.getItem('preffered-theme') || 'kawaii';
+    //         this.playThemeMusic(currentTheme);
+    //     }
+
+    // }, 4000); diddnt work as intended
+ 
 }
 
+// timer or ther stopwatch for tasks anew featur i added but problem - msg not displaying 
 
 let musicController;
-
+let voiceController;
 
 
 function saveTasksToLocalStorage() {
@@ -144,13 +277,14 @@ function loadTasksFromLocalStorage() {
 
 
     }else {
-        console.log('No saved tasks found'); // saving works goo d local memeory 
+        console.log('No saved tasks found'); 
     }
 }
 
 
 let selectedSticker;
 let mascot;    
+// mascot images loaded here the main pahe theme
 let normalMascot = "images/kawaii-normal.png";
 let addingTaskMascot = "images/kawaii-ready.png";
 let removingTaskMascot = "images/kawaii-doing.png";
@@ -246,9 +380,117 @@ function switchTheme(themeName) {
 
     currentTheme = normalizedTheme;
     localStorage.setItem('preferred-theme', normalizedTheme);
-    musicController.playThemeMusic(normalizedTheme);
-}
 
+    if (musicController) {
+        musicController.playThemeMusic(normalizedTheme);
+    }
+    // setTimeout(() =>{
+    //     voiceController.playVoiceClip('greeting', normalizedTheme);
+    // }) doing this so there no greeting on every theme change
+}
+class TaskTimer {
+    constructor() {
+        this.timers = new Map();
+        this.notifications = new Map();
+    }
+
+    createTimerElement() {
+        const timerContainer = document.createElement('div');
+        timerContainer.className = 'timer-container';
+        timerContainer.innerHTML = `
+            <input type="number" class="timer-input" min="1" max="180" placeholder="mins">
+            <button class="timer-btn start">⏱️</button>
+            <button class="timer-btn pause hidden">⏸️</button>
+            <button class="timer-btn reset hidden">🔄</button>
+            <span class="time-display">00:00</span>
+        `;
+        return timerContainer;
+    }
+
+    attachTimer(taskElement) {
+        const timerContainer = this.createTimerElement();
+        const timeInput = timerContainer.querySelector('.timer-input');
+        const startBtn = timerContainer.querySelector('.start');
+        const pauseBtn = timerContainer.querySelector('.pause');
+        const resetBtn = timerContainer.querySelector('.reset');
+        const display = timerContainer.querySelector('.time-display');
+
+        let timeLeft = 0;
+        let timerId = null;
+        let isPaused = false;
+
+        const updateDisplay = () => {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        };
+
+        const startTimer = () => {
+            if (!timeLeft && timeInput.value) {
+                timeLeft = parseInt(timeInput.value) * 60;
+            }
+
+            if (timeLeft <= 0) return;
+
+            timeInput.classList.add('hidden');
+            startBtn.classList.add('hidden');
+            pauseBtn.classList.remove('hidden');
+            resetBtn.classList.remove('hidden');
+
+            timerId = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timerId);
+                    this.timeUp(taskElement);
+                }
+            }, 1000);
+        };
+
+        const pauseTimer = () => {
+            clearInterval(timerId);
+            isPaused = true;
+            pauseBtn.classList.add('hidden');
+            startBtn.classList.remove('hidden');
+        };
+
+        const resetTimer = () => {
+            clearInterval(timerId);
+            timeLeft = 0;
+            display.textContent = '00:00';
+            timeInput.value = '';
+            timeInput.classList.remove('hidden');
+            startBtn.classList.remove('hidden');
+            pauseBtn.classList.add('hidden');
+            resetBtn.classList.add('hidden');
+        };
+
+        startBtn.addEventListener('click', startTimer);
+        pauseBtn.addEventListener('click', pauseTimer);
+        resetBtn.addEventListener('click', resetTimer);
+
+        taskElement.insertBefore(timerContainer, taskElement.querySelector('.delete'));
+    }
+
+    timeUp(taskElement) {
+        const currentTheme = localStorage.getItem('preferred-theme') || 'kawaii';
+        voiceController.playVoiceClip('taskCompleted', currentTheme);
+
+        if (Notification.permission === 'granted') {
+            const taskText = taskElement.querySelector('span').textContent;
+            new Notification('Momochans sure the times finished', {
+                body: `tuturu times up for the task: ${taskText}`,
+                icon: normalMascot
+            });
+        }
+
+        taskElement.style.animation = 'pulse 0.5s ease-in-out 3';
+        setTimeout(() => {
+            taskElement.style.animation = '';
+        }, 1500);
+    }
+}
 
 function createTaskElement(taskText, selectedSticker) {
     const li = document.createElement("li");
@@ -257,31 +499,68 @@ function createTaskElement(taskText, selectedSticker) {
         <span>${selectedSticker} ${taskText}</span>
         <button class="delete">🗑️</button>
     `;
-    
+
+    const taskTimer = new TaskTimer();
+    taskTimer.attachTimer(li);
+
     li.querySelector('.delete').addEventListener('click', function() {
+        const currentTheme = localStorage.getItem('preferred-theme') || 'kawaii';
         li.style.animation = 'sparkle 0.5s ease-out';
         setTimeout(() => {
             li.remove();
             changeMascot(removingTaskMascot);
+            voiceController.playVoiceClip('taskCompleted', currentTheme);
             saveTasksToLocalStorage();
         }, 500);
     });
-    
+
     return li;
 }
 
+// code here used below so its a mistake
+//     const li = document.createElement("li");
+//     li.className = "task";
+//     li.innerHTML = `
+//         <span>${selectedSticker} ${taskText}</span>
+//         <button class="delete">🗑️</button>
+//     `;
+    
+//     li.querySelector('.delete').addEventListener('click', function() {
+//         li.style.animation = 'sparkle 0.5s ease-out';
+//         setTimeout(() => {
+//             li.remove();
+//             changeMascot(removingTaskMascot);
+//             changeMascot(removingTaskMascot);
+//             voiceController.playVoiceClip('taskCompleted',currentTheme);
+//             saveTasksToLocalStorage();
+//         }, 500);
+//     });
+    
+//     return li;
+// }
+
 function initializeApp() {
     mascot = document.getElementById("mascot");
+    voiceController = new VoiceController();
+    // voiceController.playVoiceClip('click', currentTheme);
+   
+
     const taskInput = document.getElementById("taskInput");
     const addTaskBtn = document.getElementById("addTask");
     const taskList = document.getElementById("taskList");
+
+    
 
 
     let savedTheme = localStorage.getItem('preferred-theme') || 'kawaii';
     savedTheme = savedTheme.charAt(0).toUpperCase() + savedTheme.slice(1).toLowerCase();
 
-    musicController = new backgroundMusicController();
+    musicController = new BackgroundMusicController();
 
+    setTimeout(()=>{
+        voiceController.playVoiceClip('greeting', currentTheme);
+
+    }, 1000);
 
     selectedSticker = themes[currentTheme].stickers[0];
 
@@ -291,10 +570,8 @@ function initializeApp() {
     console.log('Task list element:', taskList);
     console.log('Initial tasks:', document.querySelectorAll('#taskList li.task'));
 
-    document.addEventListener('DOMContentLoaded', () => {
-        musicController=new backgroundMusicController();
-        initializeApp();
-    })
+
+
     document.querySelectorAll('.sticker').forEach(sticker => {
         sticker.addEventListener('click', () => {
             selectedSticker = sticker.textContent;
@@ -310,6 +587,7 @@ function initializeApp() {
             taskList.appendChild(taskElement);
             taskInput.value = "";
             changeMascot(addingTaskMascot);
+            voiceController.playVoiceClip('taskAdded',currentTheme);
             console.log('Adding task:', taskText, 'with sticker:', selectedSticker);
             saveTasksToLocalStorage();
         }
@@ -341,7 +619,7 @@ function initializeApp() {
 
     switchTheme(savedTheme);
     
-    musicController.playThemeMusic(currentTheme)
+    
 }
 
 document.addEventListener('DOMContentLoaded', initializeApp);
